@@ -4,12 +4,15 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.Log
 import android.view.View
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class Lienzo(activity: MainActivity):View(activity) {
 
     val murcielago = Figura(this, R.drawable.muercielago, 50f, 600f)
     val fondo = Figura(this, R.drawable.fondo_hallo, 0f, 0f)
-    val coco = Figura(this, R.drawable.groovy, 600f, 800f)
+    val coco = Figura(this, R.drawable.groovy, 1200f, 800f)
     val jack = Figura(this, R.drawable.jack, 475f, 950f)
     val murciegaLuna = Figura(this, R.drawable.murcielagoluna, 600f, 50f)
     val tumba = Figura(this, R.drawable.tumba1, 25f, 950f)
@@ -33,8 +36,34 @@ class Lienzo(activity: MainActivity):View(activity) {
         animarJack.start()
         val murcielagote = HiloVampiroteVolador(this)
         murcielagote.start()
+        reboteMurcielago()
+        sorpresaCoco()
     }
 
+    fun reboteMurcielago() = GlobalScope.launch {
+        var direccionX = 5
+        var direccionY = 5
+        while (true){
+            delay(20)
+            murcielago.x += direccionX
+            murcielago.y += direccionY
+            if(murcielago.x < 0 || murcielago.x > 1080){
+                direccionX *= -1
+            }
+            if(murcielago.y < 590 || murcielago.y > 610){
+                direccionY   *= -1
+            }
+            invalidate()
+        }
+    }
+
+    fun sorpresaCoco() = GlobalScope.launch {
+        while (coco.x > 1080f){
+            coco.x -= 5
+            invalidate()
+            delay(10)
+        }
+    }
 }
 
 class HiloJackAnimado(lienzo: Lienzo):Thread(){

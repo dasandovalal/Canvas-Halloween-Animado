@@ -21,9 +21,9 @@ class Lienzo(activity: MainActivity):View(activity) {
 
         fondo.pintar(c)
         tumba.pintar(c)
-        murciegaLuna.pintar(c)
         jack.pintar(c)
         murcielago.pintar(c)
+        murciegaLuna.pintar(c)
         coco.pintar(c)
 
     }
@@ -31,6 +31,8 @@ class Lienzo(activity: MainActivity):View(activity) {
     init {
         val animarJack = HiloJackAnimado(this)
         animarJack.start()
+        val murcielagote = HiloVampiroteVolador(this)
+        murcielagote.start()
     }
 
 }
@@ -52,8 +54,31 @@ class HiloJackAnimado(lienzo: Lienzo):Thread(){
             }
             l.invalidate()
             sleep(50)
-            Log.i("~Alpha Jack: ", "${l.jack.p.alpha}")
         }
     }
+}
 
+class HiloVampiroteVolador(lienzo: Lienzo):Thread(){
+    val l = lienzo
+    override fun run() {
+        super.run()
+        volarMurcielago()
+    }
+
+    fun volarMurcielago(){
+        var dirX = 5
+        var dirY = 5
+        while (true){
+            l.murciegaLuna.x -= dirX
+            l.murciegaLuna.y += dirY
+            if (l.murciegaLuna.x<-800 || l.murciegaLuna.x>1600){
+                dirX *= -1
+            }
+            if (l.murciegaLuna.y<-1500 || l.murciegaLuna.y>3000){
+                dirY *= -1
+            }
+            l.invalidate()
+            sleep(15)
+        }
+    }
 }

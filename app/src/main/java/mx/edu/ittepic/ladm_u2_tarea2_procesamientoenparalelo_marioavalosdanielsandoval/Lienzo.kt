@@ -12,7 +12,7 @@ class Lienzo(activity: MainActivity):View(activity) {
 
     val murcielago = Figura(this, R.drawable.muercielago, 50f, 600f)
     val fondo = Figura(this, R.drawable.fondo_hallo, 0f, 0f)
-    val coco = Figura(this, R.drawable.groovy, 1200f, 800f)
+    val coco = Figura(this, R.drawable.groovy, 1500f, 800f)
     val jack = Figura(this, R.drawable.jack, 475f, 950f)
     val murciegaLuna = Figura(this, R.drawable.murcielagoluna, 600f, 50f)
     val tumba = Figura(this, R.drawable.tumba1, 25f, 950f)
@@ -44,13 +44,13 @@ class Lienzo(activity: MainActivity):View(activity) {
         var direccionX = 5
         var direccionY = 5
         while (true){
-            delay(20)
+            delay(12)
             murcielago.x += direccionX
             murcielago.y += direccionY
-            if(murcielago.x < 0 || murcielago.x > 1080){
+            if(murcielago.x < 0 || murcielago.x > 1000){
                 direccionX *= -1
             }
-            if(murcielago.y < 590 || murcielago.y > 610){
+            if(murcielago.y < 580 || murcielago.y > 620){
                 direccionY   *= -1
             }
             invalidate()
@@ -58,10 +58,15 @@ class Lienzo(activity: MainActivity):View(activity) {
     }
 
     fun sorpresaCoco() = GlobalScope.launch {
-        while (coco.x > 1080f){
-            coco.x -= 5
+        var dirX = 3
+        while (true){
+            coco.x -= dirX
+            if (coco.x<600 || coco.x>1500){
+                delay(2000)
+                dirX *=-1
+            }
             invalidate()
-            delay(10)
+            delay(15)
         }
     }
 }
@@ -75,6 +80,7 @@ class HiloJackAnimado(lienzo: Lienzo):Thread(){
 
     fun animarAJack(){
         var vanish = 1
+        sleep(6000)
         while (true){
             l.jack.p.alpha -= vanish
             if (l.jack.p.alpha<=0 || l.jack.p.alpha>=255) {
